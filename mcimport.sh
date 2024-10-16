@@ -4,6 +4,8 @@
 # meant to assist users and provide an easy way to select input and output folders, and
 # assure that the python script runs from the correct location.
 
+echo "${HOME}/Library/Application\ Support/minetest"
+
 cd `dirname $0`
 
 if [ ! -f map_content.txt ]; then

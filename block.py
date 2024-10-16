@@ -83,15 +83,21 @@ class MCChunk:
             udata = zlib.decompress(data)
         else:
             raise ValueError("Unsupported compression type")
-        raw_data = nbt.read(udata)['']['Level']
+        
         self.blocks = []
-        if ext == "mca":
-            # Anvil file format
-            for section in raw_data["Sections"]:
-                self.blocks.append(MCBlock(raw_data, (chkx, chkz), section["Y"], True))
-        else:
-            for yslice in range(8):
-                self.blocks.append(MCBlock(raw_data, (chkx, chkz), yslice, False))
+        try:
+            raw_data = nbt.read(udata)['']['Level']
+            if ext == "mca":
+                # Anvil file format
+                for section in raw_data["Sections"]:
+                    self.blocks.append(MCBlock(raw_data, (chkx, chkz), section["Y"], True))
+            else:
+                for yslice in range(8):
+                    self.blocks.append(MCBlock(raw_data, (chkx, chkz), yslice, False))
+        except KeyError:
+            raw_data = None
+            print("'Level' not found") 
+
 
 
 
